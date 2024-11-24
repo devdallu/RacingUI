@@ -36,11 +36,12 @@ Follow these steps to set up the project on your machine:
 
 ![Screenshot 2024-11-25 at 12 17 56 AM](https://github.com/user-attachments/assets/26c2eb66-1801-42fc-b516-ec6fcee079b6)
 
-To resolve the error while installing your own Swift Package Manager package, follow these revised steps:
+To resolve the error while installing own Swift Package Manager package, follow these revised steps:
 
 **Remove the "RacingUI" framework from the Target (General -> Frameworks).
 ![Screenshot 2024-11-25 at 12 18 27 AM](https://github.com/user-attachments/assets/4f5b186d-606f-4e7d-9ab2-1f1e58245f23)
 Add the framework using its Git URL: https://github.com/devdallu/RacingUI.git.
+![Screenshot 2024-11-25 at 12 28 30 AM](https://github.com/user-attachments/assets/38bfdba8-cae2-4451-94b9-625604a2cf92)
 ![Screenshot 2024-11-25 at 12 20 10 AM](https://github.com/user-attachments/assets/1598c15e-58cc-401b-b231-28c5aebaaeac)
 Select the appropriate target for the package.**
 ![Screenshot 2024-11-25 at 12 20 27 AM](https://github.com/user-attachments/assets/b89083d9-433d-4c8a-a00a-930d2e6b7372)
