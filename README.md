@@ -35,6 +35,7 @@ Follow these steps to set up the project on your machine:
    Using Swift Package Manager, the dependencies should resolve automatically when you open the project in Xcode.
 
 ![Screenshot 2024-11-25 at 12 17 56 AM](https://github.com/user-attachments/assets/26c2eb66-1801-42fc-b516-ec6fcee079b6)
+
 To resolve the error while installing your own Swift Package Manager package, follow these revised steps:
 
 **Remove the "RacingUI" framework from the Target (General -> Frameworks).
