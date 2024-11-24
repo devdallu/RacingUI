@@ -119,4 +119,5 @@ Run tests using ⌘+U in Xcode.
 The app uses the Neds Racing API:
 - Base URL: https://api.neds.com.au/rest/v1/racing/
 - Endpoint: `?method=nextraces&count=10`
-![Simulator Screenshot - iPhone 16 Plus - 2024-11-24 at 22 51 41](https://github.com/user-attachments/assets/e1b45686-120c-4687-b474-e3fa8929cd04)
+
+![Simulator Screenshot - iPhone 16 Plus - 2024-11-24 at 22 51 41](https://github.com/user-attachments/assets/dcb9d508-920a-4350-8031-cfa9fab3b6df)
