@@ -29,8 +29,9 @@ struct RaceRowView: View {
             .listRowSeparator(.hidden)
             .accessibilityElement(children: .combine)
             .accessibilityLabel(viewModel.accessibilityLabel)
+            .accessibilityValue("Starting in \(viewModel.raceCountdownText())")
         }
-        .font(.body)
+        .dynamicTypeSize(...DynamicTypeSize.accessibility3)
         .accessibilityAddTraits(.isButton)
     }
 }
