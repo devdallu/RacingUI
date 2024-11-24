@@ -1,0 +1,3 @@
+/Users/ganeshkumarananthidwarakan/Documents/RacingUI/Next5Racing/Next5Racing/NetworkManager/RaceService.swift:47:1: warning: Trailing Newline Violation: Files should have a single trailing newline (trailing_newline)
+/Users/ganeshkumarananthidwarakan/Documents/RacingUI/Next5Racing/Next5Racing/NetworkManager/RaceService.swift:15:1: warning: Vertical Whitespace Violation: Limit vertical whitespace to a single empty line; currently 3 (vertical_whitespace)
+/Users/ganeshkumarananthidwarakan/Documents/RacingUI/Next5Racing/Next5Racing/NetworkManager/RaceService.swift:47:1: warning: Vertical Whitespace Violation: Limit vertical whitespace to a single empty line; currently 7 (vertical_whitespace)
