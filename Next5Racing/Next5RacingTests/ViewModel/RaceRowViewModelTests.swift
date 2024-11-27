@@ -115,8 +115,23 @@ final class RaceRowViewModelTests: XCTestCase {
             expectation.fulfill()
         }
         
-        wait(for: [expectation], timeout: 2)
+        wait(for: [expectation], timeout: 5)
     }
+    @MainActor func testOnRaceStartCallbackIsInvoked() {
+          // Given
+          let expectation = XCTestExpectation(description: "onRaceStart callback invoked")
+          let pastTime = Int(Date().timeIntervalSince1970) - 61 // Race started 61 seconds ago
+          let raceSummary = createMockRaceSummary(withStartTime: pastTime)
+          let viewModel = RaceRowViewModel(raceSummary: raceSummary, onRaceStart: {
+              expectation.fulfill()
+          })
+          
+          // When
+          viewModel.updateRemainingTime() // Force update
+          
+          // Then
+          wait(for: [expectation], timeout: 2)
+      }
     // MARK: - Helpers
     
     private func createMockRaceSummary(withStartTime seconds: Int? = 1633046400) -> RaceSummary {

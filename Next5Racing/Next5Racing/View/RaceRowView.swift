@@ -13,8 +13,11 @@ struct RaceRowView: View {
     @StateObject private var viewModel: RaceRowViewModel
     private let categoryImage: String
     
-    init(raceSummary: RaceSummary, categoryImage: String) {
-        self._viewModel = StateObject(wrappedValue: RaceRowViewModel(raceSummary: raceSummary))
+    init(
+        raceSummary: RaceSummary,
+        categoryImage: String,
+        onRaceStart: (() -> Void)? = nil) {
+        self._viewModel = StateObject(wrappedValue: RaceRowViewModel(raceSummary: raceSummary, onRaceStart: onRaceStart))
         self.categoryImage = categoryImage
     }
     

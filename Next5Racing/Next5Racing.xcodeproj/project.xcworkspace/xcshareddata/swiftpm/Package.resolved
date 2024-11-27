@@ -1,5 +1,5 @@
 {
-  "originHash" : "9c46ba32b940e070bebbabd59ca161d36800afbdddaa8646cd2a0ef6db9ecdbc",
+  "originHash" : "58a84d79f1ff965676ed8abb17db124f79b8914016f9b948dfb1aa5d8ceb339a",
   "pins" : [
     {
       "identity" : "collectionconcurrencykit",
@@ -22,10 +22,10 @@
     {
       "identity" : "racingui",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/devdallu/RacingUI.git",
+      "location" : "https://github.com/devdallu/RacingUI",
       "state" : {
         "branch" : "main",
-        "revision" : "76a3c52102b08829b68005f5bbbb6d6a7966ffe2"
+        "revision" : "348310ac130e6a53b7a8e56f3afb888adc829c9d"
       }
     },
     {

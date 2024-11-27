@@ -9,11 +9,18 @@ import Foundation
 import Combine
 
 class RaceRowViewModel: ObservableObject {
+    // MARK: - Constants
+    
+    enum RaceConstants {
+        static let raceStartedThreshold: Int = -60
+        static let timerInterval: TimeInterval = 1
+        static let secondsInAMinute: Int = 60
+    }
     // MARK: - Properties
     
     let raceSummary: RaceSummary
     private var timer: AnyCancellable?
-    private var cancellables = Set<AnyCancellable>()
+    var onRaceStart: (() -> Void)?
     
     @Published private(set) var remainingTime: Int?
     
@@ -21,8 +28,9 @@ class RaceRowViewModel: ObservableObject {
     
     /// Initializes a new race row view model
     @MainActor
-    init(raceSummary: RaceSummary) {
+    init(raceSummary: RaceSummary, onRaceStart: (() -> Void)? = nil) {
         self.raceSummary = raceSummary
+        self.onRaceStart = onRaceStart
         if let advertisedStart = raceSummary.advertisedStart?.seconds {
             self.remainingTime = advertisedStart - Int(Date().timeIntervalSince1970)
         }
@@ -30,25 +38,26 @@ class RaceRowViewModel: ObservableObject {
     }
 }
 // MARK: - Timer Management
-private extension RaceRowViewModel {
+extension RaceRowViewModel {
     /// Sets up the timer to update the remaining time every second
     @MainActor
     private func setupTimer() {
         if timer == nil {
-            timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
-                .sink { [weak self] _ in
-                    self?.updateRemainingTime()
-                }
+            timer = TimerUtility.startTimer(interval: RaceConstants.timerInterval) { [weak self] in
+                self?.updateRemainingTime()
+            }
         }
     }
     
     /// Updates the remaining time until race start
     @MainActor
-    private func updateRemainingTime() {
+    func updateRemainingTime() {
         if let advertisedStart = raceSummary.advertisedStart?.seconds {
             remainingTime = advertisedStart - Int(Date().timeIntervalSince1970)
-            if remainingTime ?? 0 == -60 {
+            if remainingTime ?? 0 <= RaceConstants.raceStartedThreshold {
                 timer?.cancel()
+                TimerUtility.cancelTimer(&timer)
+                onRaceStart?()
             }
         }
     }
@@ -60,12 +69,12 @@ extension RaceRowViewModel {
     func raceCountdownText() -> String {
         guard let remainingTime = remainingTime else { return "Time unknown" }
         if remainingTime > 0 {
-            let minutes = remainingTime / 60
-            let seconds = remainingTime % 60
+            let minutes = remainingTime / RaceConstants.secondsInAMinute
+            let seconds = remainingTime % RaceConstants.secondsInAMinute
             return "\(minutes) min \(seconds)s"
         } else {
             let elapsedSeconds = abs(remainingTime)
-            if elapsedSeconds < 60 {
+            if elapsedSeconds < RaceConstants.secondsInAMinute {
                 return "-\(elapsedSeconds)s"
             } else {
                 return "Race Started!"

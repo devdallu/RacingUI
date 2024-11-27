@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		AC0ACC762CEF136C00207022 /* RacingUI in Frameworks */ = {isa = PBXBuildFile; productRef = AC0ACC752CEF136C00207022 /* RacingUI */; };
+		AC80708D2CF751D3007300F2 /* RacingUI in Frameworks */ = {isa = PBXBuildFile; productRef = AC80708C2CF751D3007300F2 /* RacingUI */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,7 +43,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AC0ACC762CEF136C00207022 /* RacingUI in Frameworks */,
+				AC80708D2CF751D3007300F2 /* RacingUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -104,7 +104,7 @@
 			);
 			name = Next5Racing;
 			packageProductDependencies = (
-				AC0ACC752CEF136C00207022 /* RacingUI */,
+				AC80708C2CF751D3007300F2 /* RacingUI */,
 			);
 			productName = Next5Racing;
 			productReference = AC338ABB2CEF126900AAEE2F /* Next5Racing.app */;
@@ -163,8 +163,8 @@
 			mainGroup = AC338AB22CEF126900AAEE2F;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				AC0ACC742CEF136C00207022 /* XCRemoteSwiftPackageReference "RacingUI" */,
 				AC20895F2CF0AC0500745E78 /* XCRemoteSwiftPackageReference "SwiftLint" */,
+				AC80708B2CF751CD007300F2 /* XCRemoteSwiftPackageReference "RacingUI" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = AC338ABC2CEF126900AAEE2F /* Products */;
@@ -495,14 +495,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		AC0ACC742CEF136C00207022 /* XCRemoteSwiftPackageReference "RacingUI" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/devdallu/RacingUI.git";
-			requirement = {
-				branch = main;
-				kind = branch;
-			};
-		};
 		AC20895F2CF0AC0500745E78 /* XCRemoteSwiftPackageReference "SwiftLint" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/realm/SwiftLint.git";
@@ -511,12 +503,20 @@
 				version = 0.57.0;
 			};
 		};
+		AC80708B2CF751CD007300F2 /* XCRemoteSwiftPackageReference "RacingUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/devdallu/RacingUI";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		AC0ACC752CEF136C00207022 /* RacingUI */ = {
+		AC80708C2CF751D3007300F2 /* RacingUI */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = AC0ACC742CEF136C00207022 /* XCRemoteSwiftPackageReference "RacingUI" */;
+			package = AC80708B2CF751CD007300F2 /* XCRemoteSwiftPackageReference "RacingUI" */;
 			productName = RacingUI;
 		};
 /* End XCSwiftPackageProductDependency section */

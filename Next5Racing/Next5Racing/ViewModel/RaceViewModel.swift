@@ -11,6 +11,13 @@ import Combine
 /// The ViewModel responsible for managing race data and business logic for the RaceView.
 @MainActor
 class RaceViewModel: ObservableObject {
+    // MARK: - Constants
+    
+    enum RaceConstants {
+        static let raceAutoRefreshInterval: TimeInterval = 60
+        static let raceStartedThreshold: Int = -60
+        static let raceListLimit: Int = 5
+    }
     // MARK: - Published Properties
     
     @Published private(set) var viewState: RaceViewState = .loading
@@ -22,8 +29,6 @@ class RaceViewModel: ObservableObject {
     private let raceService: RaceServiceProtocol
     private var refreshTask: Task<Void, Never>?
     private var autoRefreshTimer: AnyCancellable?
-    private var raceCheckTimer: AnyCancellable?
-    private var lastFetchTime: Date?
     private let networkManager: NetworkManager
     
     // MARK: - Initialization
@@ -31,9 +36,7 @@ class RaceViewModel: ObservableObject {
     init(raceService: RaceServiceProtocol = RaceService(), networkManager: NetworkManager = NetworkManager()) {
         self.raceService = raceService
         self.networkManager = networkManager
-        getRaces()
         setupAutoRefresh()
-        setupRaceCheckTimer()
     }
     
     // MARK: - Public Methods
@@ -51,7 +54,6 @@ class RaceViewModel: ObservableObject {
     deinit {
         refreshTask?.cancel()
         autoRefreshTimer?.cancel()
-        raceCheckTimer?.cancel()
     }
     
 }
@@ -59,42 +61,18 @@ class RaceViewModel: ObservableObject {
 // MARK: - Timer Setup Extension
 
 private extension RaceViewModel {
-    /// Sets up an auto-refresh timer that triggers every 30 seconds
+    /// Sets up an auto-refresh timer that triggers every 60 seconds
     private func setupAutoRefresh() {
-        // Set up a timer that publishes every 30 seconds
-        autoRefreshTimer = Timer.publish(every: 30, on: .main, in: .common).autoconnect()
+        // Set up a timer that publishes every 60 seconds
+        autoRefreshTimer = Timer.publish(every: RaceConstants.raceAutoRefreshInterval, on: .main, in: .common).autoconnect()
             .sink { [weak self] _ in
                 self?.getRaces()
-            }
-    }
-    
-    /// Sets up a timer to check for and remove expired races every second
-    private func setupRaceCheckTimer() {
-        raceCheckTimer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
-            .sink { [weak self] _ in
-                self?.removeExpiredRaces()
             }
     }
 }
 
 // MARK: - Race Data Management Extension
 extension RaceViewModel {
-    /// Removes races that have been started for 60 seconds or more
-    func removeExpiredRaces() {
-        let currentTime = Int(Date().timeIntervalSince1970)
-        let expiredRaces = races.filter { raceSummary in
-            guard let advertisedStart = raceSummary.advertisedStart?.seconds else { return false }
-            return currentTime - advertisedStart >= 60
-        }
-        // If any race expired, fetch new races
-        if !expiredRaces.isEmpty {
-            getRaces()
-        }
-        if races.isEmpty {
-            viewState = .empty
-        }
-    }
-    
     /// Fetches races from the service and updates the view state accordingly
     /// - Handles network connectivity checks
     /// - Filters races based on selected categories
@@ -123,16 +101,20 @@ extension RaceViewModel {
                 .compactMap { raceSummary -> RaceSummary? in
                     guard let advertisedStart = raceSummary.advertisedStart?.seconds else { return nil }
                     // Calculate exact time since start
-                    let timeSinceStart = currentTime - advertisedStart
-                    // Only exclude if EXACTLY 60 seconds or more have passed
-                    guard timeSinceStart <= 60 else { return nil }
+                    let timeUntilStart = advertisedStart - currentTime
+                    // Filter out races that are 60 seconds or more past start
+                    guard timeUntilStart > RaceConstants.raceStartedThreshold else { return nil }
                     if selectedCategories.isEmpty || selectedCategories.contains(raceSummary.categoryID ?? "") {
                         return raceSummary
                     }
                     return nil
                 }
-                .sorted { ($0.advertisedStart?.seconds ?? 0) < ($1.advertisedStart?.seconds ?? 0) }
-                .prefix(5)
+                .sorted { race1, race2 in
+                    let time1 = (race1.advertisedStart?.seconds ?? 0) - currentTime
+                    let time2 = (race2.advertisedStart?.seconds ?? 0) - currentTime
+                    return time1 < time2
+                }
+                .prefix(RaceConstants.raceListLimit)
             
             let finalRaces = Array(newRaces ?? [])
             
@@ -141,12 +123,7 @@ extension RaceViewModel {
             } else {
                 self.viewState = .loaded(finalRaces)
             }
-            
-            // Only update the races list if there are changes
-            if races.map({ $0.raceID }) != finalRaces.map({ $0.raceID }) {
-                self.races = finalRaces
-                lastFetchTime = .now
-            }
+            self.races = finalRaces
         } catch {
             if error is CancellationError { return }
             viewState = .error(error.localizedDescription)

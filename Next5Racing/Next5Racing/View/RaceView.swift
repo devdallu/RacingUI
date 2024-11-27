@@ -52,6 +52,7 @@ struct RaceView: View {
                 AnimatedClearIcon(selectedCategories: .constant(viewModel.selectedCategories)) {
                     viewModel.clearAllSelections()
                 }
+                .disabled(viewModel.selectedCategories.isEmpty)
                 .accessibilityLabel("Clear all filters")
             }
             .padding(.horizontal)
@@ -90,7 +91,12 @@ struct RaceView: View {
         List(races, id: \.self) { raceSummary in
             RaceRowView(
                 raceSummary: raceSummary,
-                categoryImage: viewModel.getCategoryImage(for: raceSummary.categoryID ?? "")
+                categoryImage: viewModel.getCategoryImage(for: raceSummary.categoryID ?? ""),
+                onRaceStart: {
+                       Task {
+                           await viewModel.fetchRaces()
+                       }
+                   }
             )
             .listRowSeparator(.hidden)
         }
